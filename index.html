@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="リベスト防水工業 代表 渡邉空也 電子名刺">
+    <title>電子名刺 | リベスト防水工業</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Immersive "Dawn" Color Palette */
+            --bg-deep: #020617;
+            /* Slate-950 */
+            --bg-accent: #1e1b4b;
+            /* Indigo-950 */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+
+            /* Brand Colors */
+            --line-green: #06C755;
+            --insta-gradient: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+
+            /* UI Elements */
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --inner-glow: inset 0 0 20px rgba(255, 255, 255, 0.03);
+            --border-radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 20px 80px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* --- Dynamic Background: The Dawn Mesh --- */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, var(--bg-accent), var(--bg-deep));
+            overflow: hidden;
+        }
+
+        .bg-mesh::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image:
+                radial-gradient(circle at 30% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(6, 199, 85, 0.1) 0%, transparent 40%);
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .bg-mesh::after {
+                animation: meshMove 20s infinite linear;
+            }
+        }
+
+        @keyframes meshMove {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- Immersive Card --- */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 32px;
+            padding: 32px 28px 40px;
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                var(--inner-glow);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .card {
+                animation: cardEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            }
+
+            .card::before {
+                content: "";
+                position: absolute;
+                top: -100%;
+                left: -100%;
+                width: 300%;
+                height: 300%;
+                background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+                transform: rotate(-45deg);
+                animation: cardShine 8s infinite linear;
+                pointer-events: none;
+            }
+        }
+
+        @keyframes cardShine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(-45deg);
+            }
+
+            20%,
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(-45deg);
+            }
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* --- Header: The Rising Sun --- */
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .logo-container {
+            width: 190px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Soft Light Flare */
+        .light-flare {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .logo-container {
+                opacity: 0;
+                transform: translateY(80px) scale(0.8);
+                filter: brightness(0) blur(15px);
+                animation: risingSun 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                animation-delay: 0.6s;
+            }
+
+            .light-flare {
+                animation: flareSequence 2.5s ease-out forwards;
+                animation-delay: 1.0s;
+            }
+        }
+
+        @keyframes risingSun {
+            0% {
+                opacity: 0;
+                transform: translateY(80px) scale(0.8);
+                filter: brightness(0) blur(15px);
+            }
+
+            50% {
+                opacity: 1;
+                filter: brightness(1.3) blur(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: brightness(1) blur(0);
+            }
+        }
+
+        @keyframes flareSequence {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            40% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+        }
+
+        .logo {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .profile-info {
+                opacity: 0;
+                transform: translateY(10px);
+                animation: contentReveal 1s ease-out forwards;
+                animation-delay: 1.8s;
+            }
+        }
+
+        @keyframes contentReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .company-name-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .name {
+            font-size: 36px;
+            font-weight: 400;
+            font-family: 'Yuji Syuku', serif;
+            color: var(--text-primary);
+            letter-spacing: 0.15em;
+            line-height: 1.2;
+            background: linear-gradient(to bottom, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .kana {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 0.3em;
+            font-weight: 500;
+        }
+
+        /* --- Actions: Cascading Illumination --- */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 54px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .btn {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            .btn:nth-child(1) {
+                animation: contentReveal 0.8s ease-out forwards;
+                animation-delay: 2.0s;
+            }
+
+            .btn:nth-child(2) {
+                animation: contentReveal 0.8s ease-out forwards;
+                animation-delay: 2.1s;
+            }
+
+            .btn:nth-child(3) {
+                animation: contentReveal 0.8s ease-out forwards;
+                animation-delay: 2.2s;
+            }
+
+            .btn:nth-child(4) {
+                animation: contentReveal 0.8s ease-out forwards;
+                animation-delay: 2.3s;
+            }
+        }
+
+        /* Tactile Press Effect */
+        .btn:active {
+            transform: scale(0.96) translateY(2px);
+        }
+
+        /* Ripple Effect */
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            border-radius: 100%;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: none;
+        }
+
+        .btn:active::after {
+            animation: ripple 0.4s ease-out;
+        }
+
+        @keyframes ripple {
+            from {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(60);
+            }
+        }
+
+        .btn-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            fill: currentColor;
+        }
+
+        /* 1. LINE (Primary) */
+        .btn-line {
+            background-color: var(--line-green);
+            color: white;
+            box-shadow: 0 8px 20px -5px rgba(6, 199, 85, 0.4);
+        }
+
+        .btn-line:active {
+            box-shadow: 0 4px 10px -2px rgba(6, 199, 85, 0.3);
+        }
+
+        /* 2. Instagram */
+        .btn-insta {
+            background: var(--insta-gradient);
+            color: white;
+            box-shadow: 0 8px 20px -5px rgba(220, 39, 67, 0.3);
+        }
+
+        .btn-insta:active {
+            box-shadow: 0 4px 10px -2px rgba(220, 39, 67, 0.2);
+        }
+
+        /* 3 & 4. Phone & Email (Glass Dark) */
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-glass:active {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding-top: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .footer {
+                opacity: 0;
+                animation: fadeIn 1s ease-out forwards;
+                animation-delay: 2.5s;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .footer-logo-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 50%;
+            /* Match the circle logo shape */
+        }
+
+        .footer-logo {
+            width: 140px;
+            height: auto;
+            display: block;
+            opacity: 0;
+            /* Start hidden for entrance */
+            filter: invert(1) sepia(1) saturate(10) hue-rotate(0deg) brightness(1.4) contrast(1.1);
+            mix-blend-mode: screen;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .footer-logo {
+                animation: footerEntrance 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                animation-delay: 2.8s;
+            }
+
+            /* Golden Glint Effect - Subdued */
+            .footer-logo-container::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -150%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(255, 255, 255, 0.1),
+                        rgba(255, 255, 255, 0.3),
+                        rgba(255, 255, 255, 0.1),
+                        transparent);
+                transform: skewX(-25deg);
+                animation: goldenGlint 8s infinite;
+                animation-delay: 4.5s;
+                /* Start after entrance */
+                pointer-events: none;
+            }
+        }
+
+        @keyframes footerEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(5px) scale(0.98);
+            }
+
+            to {
+                opacity: 0.8;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes goldenGlint {
+            0% {
+                left: -150%;
+            }
+
+            30% {
+                left: 150%;
+            }
+
+            100% {
+                left: 150%;
+            }
+        }
+
+        .footer-logo:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <div class="container">
+        <main class="card">
+
+            <header class="header">
+                <div class="logo-container">
+                    <div class="light-flare"></div>
+                    <img src="logo.png" alt="リベスト防水工業 ロゴ" class="logo">
+                </div>
+                <div class="profile-info">
+                    <p class="company-name-text">リベスト防水工業</p>
+                    <h1 class="name">渡邉　空也</h1>
+                    <p class="kana">ワタナベ　クウヤ</p>
+                </div>
+            </header>
+
+            <div class="actions">
+                <!-- 1. LINE (Primary) -->
+                <a href="https://line.me/ti/p/ELesa7Ksu9" target="_blank" rel="noopener" class="btn btn-line">
+                    <svg class="btn-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M24 10.304c0-5.369-5.383-9.738-12-9.738s-12 4.369-12 9.738c0 4.814 4.269 8.846 10.036 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.304zm-14.439 3.027c0 .346-.281.626-.627.626h-2.447c-.346 0-.626-.28-.626-.626V8.108c0-.346.28-.626.626-.626.346 0 .627.28.627.626v4.141h1.82c.346 0 .627.28.627.626zm3.091 0c0 .346-.281.626-.627.626s-.627-.28-.627-.626V8.108c0-.346.28-.626.627-.626s.627.28.627.626v5.223zm5.742 0c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .346-.279.626-.631.626-.346 0-.626-.28-.626-.626V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.346.282-.626.63-.626.345 0 .63.28.63.626v5.223zm3.855-1.125h-1.755v-1.125h1.755c.349 0 .63-.283.63-.63 0-.344-.281-.629-.63-.629h-1.755V9.304h1.755c.349 0 .63-.285.63-.631 0-.345-.281-.63-.63-.63h-2.386c-.345 0-.627.285-.627.629v4.771c0 .344.282.629.63.629h2.386c.346 0 .627-.285.627-.63 0-.349-.281-.63-.63-.63z" />
+                    </svg>
+                    LINEで連絡
+                </a>
+
+                <!-- 2. Instagram -->
+                <a href="https://www.instagram.com/re.best_bousui?igsh=ZnJlYnNxaTVpbzJy&utm_source=qr" target="_blank"
+                    rel="noopener" class="btn btn-insta">
+                    <svg class="btn-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                    Instagram
+                </a>
+
+                <!-- 3. Phone -->
+                <a href="tel:08056099898" class="btn btn-glass">
+                    <svg class="btn-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    080-5609-9898
+                </a>
+
+                <!-- 4. Email -->
+                <a href="mailto:rebest.2024@gmail.com" class="btn btn-glass">
+                    <svg class="btn-icon" viewBox="0 0 24 24">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    rebest.2024@gmail.com
+                </a>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-logo-container">
+                    <img src="footer_logo_v2.png" alt="Waterproof Craftsman Re:BEST" class="footer-logo">
+                </div>
+            </footer>
+        </main>
+    </div>
+</body>
+
+</html>
